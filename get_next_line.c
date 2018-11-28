@@ -21,34 +21,42 @@ int		get_next_line(const int fd, char **line)
 	static t_list		*list;
 	int					i;
 
-	if (fd < 0 || read(fd, buff, 0) < 0)
+
+	if (fd < 0 || read(fd, buff, 0) < 0 || !line)
 		return (-1);
 	if (!list)
 		list = ft_lstnew("\0", 1);
-	while ((size = read(fd, buff, BUFF_SIZE)) > 0
-		&& ft_strchr(buff, '\n') == NULL)
+	while ((size = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[size] = '\0';
 		temp = list->content;
 		list->content = ft_strjoin(list->content, buff);
 		free(temp);
+		if (ft_strchr(buff, '\n') != NULL)
+			break;
 	}
-	while (size == BUFF_SIZE)
+	if (ft_strchr(list->content, '\n') != NULL)
 	{
-		buff[size] = '\0';
-		list->content = ft_strjoin(list->content, buff);
 		i= 0;
 		while (((char *)(list->content))[i] != '\n')
 			i++;
 		*line = ft_strsub(list->content, 0, i);
-		list->content = ft_strsub(list->content, i + 1, ft_strlen(list->content));
+		temp = list->content;
+		list->content = ft_strdup(list->content + i + 1);
+		free(temp);
+//		printf("line : %s$\n", *line);
+//		printf("list->content : %s\n", (char *)list->content);
 		return (1);
 	}
-	if (size < BUFF_SIZE && ft_strchr(buff, '\0') != NULL)
+	if (ft_strchr(buff, '\0') != NULL)
 	{
 		buff[size] = '\0';
+		temp = list->content;
+		list->content = ft_strjoin(list->content, buff);
 		*line = ft_strjoin(list->content, ft_strsub(buff, 0, size));
-		list->content = "\0";
+//		printf("line : %s$\n", *line);
+		ft_strclr(list->content);
+		free(temp);
 	}
 	return (0);
 }
