@@ -41,9 +41,7 @@ int		get_next_line(const int fd, char **line)
 		while (((char *)(list->content))[i] != '\n')
 			i++;
 		*line = ft_strsub(list->content, 0, i);
-		temp = list->content;
-		list->content = ft_strdup(list->content + i + 1);
-		free(temp);
+		list->content = list->content + i + 1;
 //		printf("line : %s$\n", *line);
 //		printf("list->content : %s\n", (char *)list->content);
 		return (1);
