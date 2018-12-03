@@ -5,43 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: epham <epham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/24 10:43:18 by epham             #+#    #+#             */
-/*   Updated: 2018/12/01 16:11:03 by epham            ###   ########.fr       */
+/*   Created: 2018/12/03 15:13:03 by epham             #+#    #+#             */
+/*   Updated: 2018/12/03 15:23:31 by epham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
 #include "get_next_line.h"
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
-int		main(void)
+int main(int ac, char **av)
 {
-	int		fd;
-	int		fd2;
-	int		ok;
-	char	*line;
+	(void)ac;
+	int	fd = 0;
+	char *line = NULL;
 
-	line = NULL;
-	fd = open("test", O_RDONLY);
-	fd2 = open("test2", O_RDONLY);
-	if (fd != (-1) && fd2 != (-1))
-		while (1)
-		{
-			ok = 1;
-			if (get_next_line(fd, &line))
-				printf("line test1 : %s$\n", line);
-			if (get_next_line(fd2, &line))
-			{
-				printf("line test2 : %s$\n", line);
-				ok = 1;
-			}
-			else
-				ok = 0;
-			if (!ok)
-				break ;
-		}
-	free(line);
-	return (0);
+	fd = open(av[1], O_RDONLY);
+	while ((get_next_line(fd, &line)) > 0)
+	{
+	   dprintf(1, "%s\n", line);
+	   free(line);	
+	}
 }
