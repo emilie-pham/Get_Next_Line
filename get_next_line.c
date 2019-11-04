@@ -6,7 +6,7 @@
 /*   By: epham <epham@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 15:59:05 by epham             #+#    #+#             */
-/*   Updated: 2018/12/03 15:21:02 by epham            ###   ########.fr       */
+/*   Updated: 2018/12/03 16:13:27 by epham            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int				ft_get_line(t_list *current, int size,
 		i = 0;
 		while (((char *)(current->content))[i] != '\n')
 			i++;
-		*line = ft_strsub(current->content, 0, i);
+		if (!(*line = ft_strsub(current->content, 0, i)))
+			return (-1);
 		current->content = ft_dupfree(current->content, i);
 		return (1);
 	}
@@ -68,7 +69,8 @@ int				ft_get_line(t_list *current, int size,
 	{
 		buff[size] = '\0';
 		current->content = ft_joinfree(current->content, buff);
-		*line = ft_strdup(current->content);
+		if (!(*line = ft_strdup(current->content)))
+			return (-1);
 		ft_strclr(current->content);
 		return (1);
 	}
